@@ -53,6 +53,7 @@ For method 3 (cDDPM):
 - run Root -x -l -q MatchAndClean.C, which takes all files in pythia-output and transforms into root files
 - Then run python root-to-texts-[item].py depending on what you want to transform. This changes items in the root file to text
 - Then run python data-normalize-[jets].py which scales all values from -1 to 1, which allow the DDPM to process them
+- NOTE, i added some dummy files in there just a place keepers for now until you generate your own data
 - Now, go into the cddpm-unfolder-master and access GPU by running in terminal "srun --pty -p gpu --time=0-12:00:00 --gres=gpu:a100:1 bash" (This step may take time if they are already taken, best to do it when servers are less busy)
 - Now go into a anaconda env with "module load anaconda" and "conda create -n "myenv"
 - Now go into configs.py file and configure the title according to the data that you want to process and change unfold size to the number of jets. The range for normalization should be the same as you set in the data-normalize file
