@@ -13,3 +13,39 @@ Unfolding is a critical computational technique in experimental physics, as it g
 
 
 # Code Instructions
+
+First step is to login into Tufts Cluster server:
+- You need to have the Tufts VPN, setup through any VPN app, I used Cisco Anyconnect
+- Connect with vpn.tufts.edu/duo
+- Login into the cluster through terminal with ssh [username]@login.cluster.tufts.edu (my username was fsong02). You will need access approval from Prof. Beauchemin
+- Copy the AnalysisFramework folder in the lab dir and then go to your dir - something like this - cd /cluster/tufts/beaucheminlab/fsong02/AnalysisFramework
+
+The next step is to begin generating data:
+- Go into the run-pythia folder and then MyPythia8Simul.cmnd file
+- This is where you set the parameters of your simulation data. Look at the comments from lines 77-94, 119-131, and 135-144 about what lines should be in and which should be commented out.
+- Load the neccesary resources to run the simulations
+- srun --pty -p largemem --time=0-12:00:00 bash
+- source /cvmfs/sft.cern.ch/lcg/releases/LCG_98python3/ROOT/v6.22.00/x86_64-centos7-gcc8-opt/ROOT-env.sh
+- Note that these sometimes change, and if they don't work, either ask me or look online.
+- Now create an SBatch file to run your simulations in parellel, so that you can split up large datasets into smaller ones. I did my best to comment, but again ask any questions if you have.
+- Ensure the node you select is open by typing sinfo into the terminal. In my experience, mix works the best. 
+- Type sbatch W1.sbatch or whatever the name of the sbatch file is to run it.
+- You should then be able to see if it you write squeue -u [username]
+- These files will then be saved as .root files to the pythia-outputs folder
+
+Analysis of Datasets:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
