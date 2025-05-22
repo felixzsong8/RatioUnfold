@@ -23,7 +23,7 @@ First step is to login into Tufts Cluster server:
 The next step is to begin generating data:
 - Go into the run-pythia folder and then MyPythia8Simul.cmnd file
 - This is where you set the parameters of your simulation data. Look at the comments from lines 77-94, 119-131, and 135-144 about what lines should be in and which should be commented out.
-- Load the neccesary resources to run the simulations
+- Load the neccesary resources to run the simulations in the following two lines
 - srun --pty -p largemem --time=0-12:00:00 bash
 - source /cvmfs/sft.cern.ch/lcg/releases/LCG_98python3/ROOT/v6.22.00/x86_64-centos7-gcc8-opt/ROOT-env.sh
 - Note that these sometimes change, and if they don't work, either ask me or look online.
@@ -34,6 +34,35 @@ The next step is to begin generating data:
 - These files will then be saved as .root files to the pythia-outputs folder
 
 Analysis of Datasets:
+- To transform the data into more understandable quantities, cd into analyze-pythia folder and look at MyAnalysis.C
+- I created a temp folder in the pythia-outputs folder because the analysis file reads through all root files in the pythia-output folder, so keep any data you've taken in the temp that you don't want read. If you read 10 W+jets files, then it will all compile into a single analysis file.
+- Run root -x -l -q MyAnalysis.C to create the file
+- Note, to get the secondary ratios, change lines 635-692 accordingly.
+
+For method 1 (Bin-by-bin):
+- Go into analyze-pythia folder
+- Run "root -x -l -q PlotMacro.C" for the representaiton for one process
+- Run "root -x -l -q MacroRatio.C" for the ratios of two different datasets
+
+For method 2 (Matrix and SVD):
+- Go into RooUnfold and Run root -x -l -q Unfold_matrix1.C
+- Some of the names are awkward, so feel free to change them, but as of now: W and Z are for leadjetpt when n>0 and W1 is leadjetpt when n>1 and W2 is for scndjetpt when n>1
+
+For method 3 (cDDPM):
+- Before you actually unfold data, you need to first process the data into text files, which is completed in the match-and-clean folder
+- run Root -x -l -q MatchAndClean.C, which takes all files in pythia-output and transforms into root files
+- Then run python root-to-texts-[item].py depending on what you want to transform. This changes items in the root file to text
+- Then run python data-normalize-[jets].py which scales all values from -1 to 1, which allow the DDPM to process them
+- Now, go into the cddpm-unfolder-master and access GPU by running in terminal "srun --pty -p gpu --time=0-12:00:00 --gres=gpu:a100:1 bash" (This step may take time if they are already taken, best to do it when servers are less busy)
+- Now go into a anaconda env with "module load anaconda" and "conda create -n "myenv"
+- Now go into configs.py file and configure the title according to the data that you want to process and change unfold size to the number of jets. The range for normalization should be the same as you set in the data-normalize file
+- then run "python train.py", "python unfold.py", and "python plot.py" for final resutls. These should take some time to run.
+- Using plot_all.py takes the data that I manually moved from the other methods and compares to the cDDPM method.
+
+
+
+
+
 
 
 
